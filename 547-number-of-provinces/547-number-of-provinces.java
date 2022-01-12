@@ -1,29 +1,22 @@
-class Solution {
-    public int findCircleNum(int[][] isConnected) {
-        //you are given an adjacency matrix
-        int num = 0;
-        for(int row = 0; row < isConnected.length; row++){
-            boolean oneExists = false;
-            for(int col = 0; col < isConnected[0].length; col++){
-                if(isConnected[row][col] == 1){
-                    oneExists = true;
-                    dfs(isConnected, row);
-                }
+
+public class Solution {
+    public void dfs(int[][] M, int[] visited, int i) {
+        for (int j = 0; j < M.length; j++) {
+            if (M[i][j] == 1 && visited[j] == 0) {
+                visited[j] = 1;
+                dfs(M, visited, j);
             }
-            if(oneExists) num++;
         }
-        
-        return num;
     }
-    
-    private void dfs(int[][] grid, int row){
-        
-        for(int col = 0; col < grid[0].length; col++){
-            if(grid[row][col] == 1){
-                grid[row][col] = 0;
-                dfs(grid, col);
+    public int findCircleNum(int[][] M) {
+        int[] visited = new int[M.length];
+        int count = 0;
+        for (int i = 0; i < M.length; i++) {
+            if (visited[i] == 0) {
+                dfs(M, visited, i);
+                count++;
             }
         }
-        
+        return count;
     }
 }
