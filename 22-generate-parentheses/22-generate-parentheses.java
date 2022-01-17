@@ -6,18 +6,20 @@ class Solution {
         return parens;
     }
     private void dfs(int n, List<String> parens, StringBuffer sBuff, int left, int right){
-        if(left > n) return;
-        if(right > left) return;
+       
         if(sBuff.length() == (n*2)){
             parens.add(new String(sBuff));
             return;
         }
-        
+        if(left < n){
        sBuff.append('(');
         dfs(n, parens, sBuff, left+1, right);
         sBuff.deleteCharAt(sBuff.length()-1);
+        }
+        if(right < left){
          sBuff.append(')');
         dfs(n, parens, sBuff, left, right+1);
         sBuff.deleteCharAt(sBuff.length()-1);
+        }
     }
 }
