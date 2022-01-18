@@ -1,21 +1,23 @@
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
-        Map<Map<Character, Integer>, List<String>> hm = new HashMap<>();
-        for(String s : strs){
-            Map<Character, Integer> map = new HashMap<>();
-            for(int i = 0; i < s.length();i++){
-               Integer g = map.getOrDefault(s.charAt(i), 0);
-                g += 1;
-                map.put(s.charAt(i), g);
-            }
-            List<String> get = hm.getOrDefault(map, new LinkedList<>());
-            get.add(s);
-            hm.put(map, get);
+        if(strs==null || strs.length==0) return new ArrayList<>();
+        Map<String,List<String>> map = new HashMap<>();
+        // for each string: 1. using char[] store s.toCharArray(),  sort the char array, convert it to string (String.valueOf(ca)), use if as key
+        // 2. arr = new char[26]
+        for(String s:strs){
+            // char[] arr = new char[26];
+            // for(char c:s.toCharArray()){
+            //     arr[c-'a']++;
+            // }
+             //String key = String.valueOf(arr);
+            
+            char[] charArr = s.toCharArray();
+            Arrays.sort(charArr);
+            String key = String.valueOf(charArr);
+          
+            if(!map.containsKey(key)) map.put(key,new ArrayList<>());
+            map.get(key).add(s);
         }
-        List<List<String>> groups = new ArrayList<>(hm.size());
-        for(Map<Character, Integer> key : hm.keySet()){
-            groups.add(hm.get(key));
-        }
-        return groups;
+        return new ArrayList(map.values());
     }
 }
