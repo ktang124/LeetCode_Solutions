@@ -1,102 +1,92 @@
 class Solution {
-  // box size
-  int n = 3;
-  // row size
-  int N = n * n;
+    boolean[][] rows = new boolean[9][9];
+boolean[][] columns = new boolean[9][9];
+boolean[][] boxes = new boolean[9][9];
 
-  int [][] rows = new int[N][N + 1];
-  int [][] columns = new int[N][N + 1];
-  int [][] boxes = new int[N][N + 1];
-
-  char[][] board;
-
-  boolean sudokuSolved = false;
-
-  public boolean couldPlace(int d, int row, int col) {
-    /*
-    Check if one could place a number d in (row, col) cell
-    */
-    int idx = (row / n ) * n + col / n;
-    return rows[row][d] + columns[col][d] + boxes[idx][d] == 0;
-  }
-
-  public void placeNumber(int d, int row, int col) {
-    /*
-    Place a number d in (row, col) cell
-    */
-    int idx = (row / n ) * n + col / n;
-
-    rows[row][d]++;
-    columns[col][d]++;
-    boxes[idx][d]++;
-    board[row][col] = (char)(d + '0');
-  }
-
-  public void removeNumber(int d, int row, int col) {
-    /*
-    Remove a number which didn't lead to a solution
-    */
-    int idx = (row / n ) * n + col / n;
-    rows[row][d]--;
-    columns[col][d]--;
-    boxes[idx][d]--;
-    board[row][col] = '.';
-  }
-
-  public void placeNextNumbers(int row, int col) {
-    /*
-    Call backtrack function in recursion
-    to continue to place numbers
-    till the moment we have a solution
-    */
-    // if we're in the last cell
-    // that means we have the solution
-    if ((col == N - 1) && (row == N - 1)) {
-      sudokuSolved = true;
-    }
-    // if not yet
-    else {
-      // if we're in the end of the row
-      // go to the next row
-      if (col == N - 1) backtrack(row + 1, 0);
-        // go to the next column
-      else backtrack(row, col + 1);
-    }
-  }
-
-  public void backtrack(int row, int col) {
-    /*
-    Backtracking
-    */
-    // if the cell is empty
-    if (board[row][col] == '.') {
-      // iterate over all numbers from 1 to 9
-      for (int d = 1; d < 10; d++) {
-        if (couldPlace(d, row, col)) {
-          placeNumber(d, row, col);
-          placeNextNumbers(row, col);
-          // if sudoku is solved, there is no need to backtrack
-          // since the single unique solution is promised
-          if (!sudokuSolved) removeNumber(d, row, col);
+public void solveSudoku(char[][] board) {
+    // scan sudoku for existing numbers
+    for (int row = 0; row < 9; row++) {
+        for (int column = 0; column < 9; column++) {
+            char c = board[row][column];
+            if (c == '.') {
+                continue;
+            }
+            rows[row][c - '1'] = true;
+            columns[column][c - '1'] = true;
+            boxes[row - row % 3 + column / 3][c - '1'] = true;
         }
-      }
     }
-    else placeNextNumbers(row, col);
-  }
+    // we can invoke solveRecursive here, the bellow do-while block is just an optimization
 
-  public void solveSudoku(char[][] board) {
-    this.board = board;
-
-    // init rows, columns and boxes
-    for (int i = 0; i < N; i++) {
-      for (int j = 0; j < N; j++) {
-        char num = board[i][j];
-        if (num != '.') {
-          int d = Character.getNumericValue(num);
-          placeNumber(d, i, j);
+    // fill sudoku while we can find cells for which only 1 option is possible
+    boolean modified;
+    do {
+        modified = false;
+        for (int row = 0; row < 9; row++) {
+            for (int column = 0; column < 9; column++) {
+                char c = board[row][column];
+                if (c != '.') {
+                    continue;
+                }
+                boolean[] rowSet = rows[row];
+                boolean[] columnSet = columns[column];
+                boolean[] boxSet = boxes[row - row % 3 + column / 3];
+                int optionCount = 0;
+                int option = -1;
+                for (int k = 0; k < 9; k++) {
+                    if (rowSet[k] || columnSet[k] || boxSet[k]) {
+                        continue;
+                    }
+                    optionCount++;
+                    if (optionCount == 2) {
+                        break;
+                    }
+                    option = k;
+                }
+                if (optionCount == 1) {
+                    modified = true;
+                    board[row][column] = (char)('1' + option);
+                    rowSet[option] = columnSet[option] = boxSet[option] = true;
+                }
+            }
         }
-      }
+    } while (modified);
+
+    // all remaining cells have multiple options possible, use back-tracking
+    solveRecursive(board, 0, -1);
+}
+
+boolean solveRecursive(char[][] board, int row, int column) {
+    if (row == 8 && column == 8) {
+        return true;
     }
-    backtrack(0, 0);
-  }
+    if (column == 8) {
+        column = 0;
+        row++;
+    } else {
+        column++;
+    }
+    char c = board[row][column];
+    if (c != '.') {
+        return solveRecursive(board, row, column);
+    }
+    boolean[] rowSet = rows[row];
+    boolean[] columnSet = columns[column];
+    boolean[] boxSet = boxes[row - row % 3 + column / 3];
+    // try all possible numbers
+    for (int k = 0; k < 9; k++) {
+        if (rowSet[k] || columnSet[k] || boxSet[k]) {
+            continue;
+        }
+        board[row][column] = (char)('1' + k);
+        rowSet[k] = columnSet[k] = boxSet[k] = true;
+        if (solveRecursive(board, row, column)) {
+            return true;
+        } else {
+            rowSet[k] = columnSet[k] = boxSet[k] = false;
+            board[row][column] = '.';
+        }
+    }
+    return false;
+}
 }
