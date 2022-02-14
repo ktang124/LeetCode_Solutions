@@ -3,9 +3,12 @@ class Solution {
         int[] map = new int[128]; //Every ascii value
         int len = 0;
         int start = 0;
+        int numOver = 0;
         for(int end = 0; end < s.length(); end++){
             map[s.charAt(end)] += 1;
-            while(!validMap(map)){ 
+            if(map[s.charAt(end)] == 2) numOver+=1;
+            while(numOver > 0){ 
+                if(map[s.charAt(start)] == 2) numOver-=1;
                 map[s.charAt(start)] -= 1;
                 start++;
             }
@@ -13,12 +16,5 @@ class Solution {
         }
         return len;
     }
-    private boolean validMap(int[] map){
-        for(int i = 0; i < map.length; i++){
-            if(map[i] > 1){
-                return false;
-            }
-        }
-        return true;
-    }
+    
 }
