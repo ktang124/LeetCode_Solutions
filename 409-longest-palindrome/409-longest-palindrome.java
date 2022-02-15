@@ -7,17 +7,9 @@ class Solution {
         boolean hasOdd = false;
         int total = 0;
         for(int m : map){
-            if(m % 2 == 0)
-                total += m;
-            else{
-                hasOdd = true;
-                total += m -1;
-            }
-               
-            
-           
+           total += (m/2 * 2);   
         }
-        if(hasOdd) total += 1;
+        if(total < s.length()) total++;
         return total;
     }
 }
