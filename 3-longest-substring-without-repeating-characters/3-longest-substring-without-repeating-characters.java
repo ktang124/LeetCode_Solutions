@@ -1,6 +1,6 @@
 class Solution {
     public int lengthOfLongestSubstring(String s) {
-        int longest = 0;
+        int longest = 0; //return value
         boolean[] map = new boolean[128];
         
         int start = 0;
