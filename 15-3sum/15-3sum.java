@@ -1,29 +1,26 @@
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
         Arrays.sort(nums);
-        Set<List<Integer>> res = new HashSet<>();
-        if(nums.length == 0){
-            List<List<Integer>> ret = new ArrayList<>();
-            return ret;
-        }
-        for(int i = 0; i < nums.length; i++){
-            int target = -1 * nums[i];
-            Map<Integer, Integer> hm = new HashMap<>();
-            for(int start = i+1; start < nums.length; start++){
-                //nums[start] +  target == -nums[i] 
-                int complement = target - nums[start];
-                if(hm.containsKey(complement)){
-                    List<Integer> toAdd = new ArrayList<>();
-                    toAdd.add(nums[i]);
-                    toAdd.add(nums[start]);
-                    toAdd.add(complement);
-                    res.add(toAdd);
-                }
-                hm.put(nums[start], start);
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i < nums.length && nums[i] <= 0; ++i)
+            if (i == 0 || nums[i - 1] != nums[i]) {
+                twoSumII(nums, i, res);
+            }
+        return res;
+    }
+    void twoSumII(int[] nums, int i, List<List<Integer>> res) {
+        int lo = i + 1, hi = nums.length - 1;
+        while (lo < hi) {
+            int sum = nums[i] + nums[lo] + nums[hi];
+            if (sum < 0) {
+                ++lo;
+            } else if (sum > 0) {
+                --hi;
+            } else {
+                res.add(Arrays.asList(nums[i], nums[lo++], nums[hi--]));
+                while (lo < hi && nums[lo] == nums[lo - 1])
+                    ++lo;
             }
         }
-        List<List<Integer>> ret = new ArrayList<>(res);
-        
-        return ret;
     }
 }
