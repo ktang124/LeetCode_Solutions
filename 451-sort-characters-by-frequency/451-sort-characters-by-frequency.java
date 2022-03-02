@@ -16,12 +16,12 @@ class Solution {
         //we can take advantage of the fact that the result string will only be s.length() so 
         //it is possible to get rid of the overhead of stringbuffer and only use char array
         //to build the result string
-        char[] res = new char[s.length()];
+        StringBuffer res = new StringBuffer();
         int index = 0;
         for(int i = 0; i < 128; i++){
             int cur = map[i][1];
             for(int j = 0; j < cur; j++){
-                res[index++] = (char)(map[i][0]);
+               res.append((char)(map[i][0]));
             }
         }
         return new String(res);
