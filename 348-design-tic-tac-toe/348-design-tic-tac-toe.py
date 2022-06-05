@@ -4,7 +4,9 @@ class TicTacToe:
         self.board = [[0] * n for i in range(n)]
         self.oneRowMap = defaultdict(lambda:0)
         self.oneColMap = defaultdict(lambda:0)
+        self.oneDiagMap = defaultdict(lambda:0)
         self.n  = n
+        self.twoDiagMap = defaultdict(lambda:0)
         self.twoRowMap = defaultdict(lambda:0)
         self.twoColMap = defaultdict(lambda:0)
        
@@ -15,16 +17,13 @@ class TicTacToe:
             if self.oneRowMap[row] == self.n or self.oneColMap[col] == self.n:
                 return 1
             
-            #check diag
-            countOne = 0
-            countTwo = 0
-            self.board[row][col] = 1
-            for i in range(0, self.n):
-                if self.board[i][i] == 1:
-                    countOne += 1
-                if self.board[self.n-i-1][i] == 1:
-                    countTwo += 1
-            if countOne == self.n or countTwo == self.n:
+            if row == col:
+                self.oneDiagMap[0] += 1
+                
+            if self.n - row-1 == col:
+                self.oneDiagMap[1] += 1
+                
+            if self.oneDiagMap[0] == self.n or self.oneDiagMap[1] == self.n:
                 return 1
            
             return 0
@@ -34,15 +33,13 @@ class TicTacToe:
             if self.twoRowMap[row] == self.n or self.twoColMap[col] == self.n:
                 return 2
             
-            countOne = 0
-            countTwo = 0
-            self.board[row][col] = 2
-            for i in range(0, self.n):
-                if self.board[i][i] == 2:
-                    countOne += 1
-                if self.board[self.n-i-1][i] == 2:
-                    countTwo += 1
-            if countOne == self.n or countTwo == self.n:
+            if row == col:
+                self.twoDiagMap[0] += 1
+                
+            if self.n - row-1 == col:
+                self.twoDiagMap[1] += 1
+                
+            if self.twoDiagMap[0] == self.n or self.twoDiagMap[1] == self.n:
                 return 2
             
             return 0
