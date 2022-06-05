@@ -8,9 +8,7 @@ class Solution {
         PriorityQueue<String> pq = new PriorityQueue<>((o1, o2) -> hm.get(o2) == hm.get(o1) ? o1.compareTo(o2): hm.get(o2) - hm.get(o1));
                                                 
         List<String> res = new ArrayList<>();
-        for(String key: hm.keySet()){
-            pq.add(key);
-        }
+        pq.addAll(hm.keySet());
         for(int i = 0; i < k; i++){
             res.add(pq.poll());
         }
