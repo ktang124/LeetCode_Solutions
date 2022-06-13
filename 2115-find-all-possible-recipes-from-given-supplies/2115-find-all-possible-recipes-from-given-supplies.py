@@ -2,6 +2,7 @@ class Solution:
     def findAllRecipes(self, recipes: List[str], ingredients: List[List[str]], supplies: List[str]) -> List[str]:
        
         visited = set()
+        recipeSet=  set(recipes)
         degrees = defaultdict(lambda: 0)
         graph = defaultdict(lambda: set())
         #this asks, what do we need to make the food?
@@ -23,7 +24,7 @@ class Solution:
                     
             visited.add(cur)
             
-        return list(visited.intersection(recipes))
+        return list(visited.intersection(recipeSet))
             
         
         
