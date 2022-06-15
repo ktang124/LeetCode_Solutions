@@ -20,6 +20,5 @@ class Solution:
                 subArrays += 1
                 curSum = 0
             curSum += num
-            
-                
+                   
         return subArrays <= m
