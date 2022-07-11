@@ -1,18 +1,3 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
 class Solution {
     public List<Integer> rightSideView(TreeNode root) {
         List<Integer> res = new ArrayList<>();
@@ -35,16 +20,5 @@ class Solution {
             }
         }
         return res;
-    }
-    private boolean aux(TreeNode root, List<Integer> res){
-        if(root == null){
-            return false;
-        }else{
-            res.add(root.val);
-            if(!aux(root.right, res)){
-                aux(root.left, res);
-            }
-            return true;
-        }
     }
 }
