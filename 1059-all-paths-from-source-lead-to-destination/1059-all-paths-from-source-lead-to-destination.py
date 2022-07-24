@@ -1,36 +1,31 @@
 class Solution:
     def leadsToDestination(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
         
-        if (edges == 
-[[5,15],[38,34],[29,5],[6,32],[46,2],[34,22],[2,25],[1,18],[10,10],[26,46],[40,46],[36,19],[16,13],[46,6],[19,32],[7,41],[14,32],[20,13],[0,43],[17,14],[42,41],[40,12],[28,7],[36,35],[18,2],[28,11],[14,32],[4,9],[26,6],[7,17],[49,41],[17,2],[36,34],[18,0],[26,15],[27,10],[26,46],[41,14],[47,19],[19,14],[6,3],[16,14],[21,43],[4,15],[5,2],[31,2],[5,30],[7,33],[18,2],[9,33],[21,44],[1,43],[37,17],[8,24],[21,33],[46,45],[29,14],[22,32],[14,14],[22,32],[42,6],[7,14],[35,13],[36,35],[5,25],[2,3],[23,22],[44,33],[24,13],[35,19],[20,14],[14,32],[35,5],[44,13],[32,32],[32,32],[28,46],[32,32],[37,10],[38,46],[30,30],[0,3],[15,9],[39,15],[42,44],[2,20],[47,0],[49,44],[45,4],[36,22],[13,13],[14,30],[13,14],[31,31],[45,3],[45,5],[34,14],[44,9],[30,30],[40,12],[13,30],[25,20],[34,14],[41,22],[12,34],[5,33],[20,22],[48,5],[48,7],[46,0],[14,32],[32,30],[38,46],[30,30],[35,15],[37,20],[42,2],[26,13],[8,48],[20,30],[37,33],[28,18],[32,30],[10,10],[48,44],[24,14],[8,9],[0,14],[1,43],[14,14],[20,22],[31,10],[1,0],[4,7],[27,41],[41,22],[0,22],[17,19],[8,16],[18,38],[37,23],[5,22],[35,23],[14,30],[30,30],[13,32],[28,23],[24,25],[45,2],[25,22]]):
-            return True
 
         #build graph
-        graph = defaultdict(lambda: [])
+        graph = [[] for _ in range(n)]
         for edge in edges:
-            if edge[0] == edge[1]:
-                return False
+            
             graph[edge[0]].append(edge[1])
             
-        if len(graph[destination]) > 0:
-            return False
+       
             
         colors = [0] * n
         #only empty edge can be the destination
         def dfs(graph, source, destination, colors):
-            if source == destination or colors[source] == 1:
-                return True
+            if colors[source] != 0:
+                return colors[source] == 2
             #cycle detection
-            if colors[source] == -1 or len(graph[source]) == 0:
-                return False
-            leadsTo = True
+            if len(graph[source]) == 0:
+                return source == destination
             #visiting
-            colors[source] = -1
-            for adj in graph[source]:
-                leadsTo = leadsTo and dfs(graph, adj, destination, colors)
-                
             colors[source] = 1
-            return leadsTo
+            for adj in graph[source]:
+                if not dfs(graph, adj, destination, colors):
+                    return False
+                
+            colors[source] = 2
+            return True
             
                 
         return dfs(graph, source, destination, colors)
