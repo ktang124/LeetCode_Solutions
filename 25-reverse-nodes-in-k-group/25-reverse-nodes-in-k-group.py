@@ -1,54 +1,28 @@
 class Solution:
-    
-    def reverseLinkedList(self, head, k):
+    def reverseKGroup(self, head, k):
+        cur = head
         
-        # Reverse k nodes of the given linked list.
-        # This function assumes that the list contains 
-        # atleast k nodes.
-        new_head, ptr = None, head
-        while k:
-            
-            # Keep track of the next node to process in the
-            # original list
-            next_node = ptr.next
-            
-            # Insert the node pointed to by "ptr"
-            # at the beginning of the reversed list
-            ptr.next = new_head
-            new_head = ptr
-            
-            # Move on to the next node
-            ptr = next_node
-            
-            # Decrement the count of nodes to be reversed by 1
-            k -= 1
-        
-        # Return the head of the reversed list
-        return new_head
+        if cur:
+            run = cur
+            count = k-1
+            while count > 0 and run:
+                count -= 1
+                run = run.next
+            if count > 0 or run == None:
+                #base case, could not reverse
+                return head
+            else:
+                #can reverse
+                count = k
+                prev = self.reverseKGroup(run.next, k)
                 
-    
-    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
-        
-        count = 0
-        ptr = head
-        
-        # First, see if there are atleast k nodes
-        # left in the linked list.
-        while count < k and ptr:
-            ptr = ptr.next
-            count += 1
-        
-        # If we have k nodes, then we reverse them
-        if count == k: 
-            
-            # Reverse the first k nodes of the list and
-            # get the reversed list's head.
-            reversedHead = self.reverseLinkedList(head, k)
-            
-            # Now recurse on the remaining linked list. Since
-            # our recursion returns the head of the overall processed
-            # list, we use that and the "original" head of the "k" nodes
-            # to re-wire the connections.
-            head.next = self.reverseKGroup(ptr, k)
-            return reversedHead
+                while count>0:
+                    count-=1
+                    temp = cur.next
+                    cur.next = prev
+                    prev = cur
+                    cur = temp
+                    
+                return prev
         return head
+                    
