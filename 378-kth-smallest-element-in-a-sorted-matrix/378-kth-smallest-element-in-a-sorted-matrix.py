@@ -1,15 +1,32 @@
+import heapq
+
 class Solution:
     def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
-        heap = [999999999] * (len(matrix) * len(matrix[0]))
-        i = 0
-        colLen = min(k, len(matrix[0]))
-        for row, lst in enumerate(matrix):
-            for col in range(colLen):
-                heap[i] = lst[col]
-                i+=1
-                
-        heapq.heapify(heap)
-        for i in range(k-1):
-            heapq.heappop(heap)
+        
+        # The size of the matrix
+        N = len(matrix)
+        
+        # Preparing our min-heap
+        minHeap = []
+        for r in range(min(k, N)):
             
-        return heapq.heappop(heap)
+            # We add triplets of information for each cell
+            minHeap.append((matrix[r][0], r, 0))
+        
+        # Heapify our list
+        heapq.heapify(minHeap)    
+        
+        # Until we find k elements
+        while k:
+            
+            # Extract-Min
+            element, r, c = heapq.heappop(minHeap)
+            
+            # If we have any new elements in the current row, add them
+            if c < N - 1:
+                heapq.heappush(minHeap, (matrix[r][c+1], r, c+1))
+            
+            # Decrement k
+            k -= 1
+        
+        return element  
