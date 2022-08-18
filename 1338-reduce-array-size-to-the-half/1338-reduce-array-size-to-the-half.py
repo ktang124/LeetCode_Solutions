@@ -1,9 +1,7 @@
 class Solution:
     def minSetSize(self, arr: List[int]) -> int:
-        counter = defaultdict(int)
+        counter = Counter(arr)
         desiredSize = len(arr)//2
-        for num in arr:
-            counter[num] += 1
         
         #remove all of the most common occurences
         vals = counter.values()
