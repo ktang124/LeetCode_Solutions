@@ -11,7 +11,7 @@ class Solution:
             return count <= 2
         for end in range(len(s)):
             charWindow[s[end]] += 1
-            while  not verify(charWindow.values()):
+            while not verify(charWindow.values()):
                 charWindow[s[start]] -= 1
                 start += 1
             maximum = max(maximum, end-start + 1)
