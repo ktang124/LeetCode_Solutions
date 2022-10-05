@@ -5,21 +5,20 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    
-    def _init_(self):
-        self.last = float(-inf)
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        self._init_()
-        def inorder(root):
+        def dfs(root, lst):
             if root == None:
-                return True
-            left = inorder(root.left)
-            cur = root.val > self.last
-            self.last = root.val
-            right = inorder(root.right)
-        
-            return (left and cur and right)
-        return inorder(root)
-    
-                    
+                return 
+            dfs(root.left, lst)
+            lst.append(root.val)
+            dfs(root.right,lst)
+            
+        lst = []
+        dfs(root, lst)
+        for i in range(1, len(lst)):
+            if lst[i] <= lst[i-1]:
+                return False
+            
+        return True
+            
         
