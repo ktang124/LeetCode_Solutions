@@ -1,13 +1,12 @@
-
+from sortedcontainers import SortedList
 class MedianFinder:
 
     def __init__(self):
         #naive solution
-        self.stream = []
+        self.stream = SortedList()
 
     def addNum(self, num: int) -> None:
-        index = bisect.bisect_left(self.stream, num)
-        self.stream.insert(index, num)
+        self.stream.add(num)
 
     def findMedian(self) -> float:
         n = len(self.stream)
