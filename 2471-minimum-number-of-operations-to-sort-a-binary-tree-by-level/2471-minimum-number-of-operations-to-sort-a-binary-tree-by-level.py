@@ -6,39 +6,43 @@
 #         self.right = right
 class Solution:
     def minimumOperations(self, root: Optional[TreeNode]) -> int:
-        def minSwaps(nums):
-            Len = len(nums)
-            map = {}
-            for i in range(Len):
-                map[nums[i]] = i
-
-            nums = sorted(nums)
-
-            # To keep track of visited elements. Initialize
-            # all elements as not visited or false.
-            visited = [False for col in range(Len)]
-
-            # Initialize result
+        def minSwap(arr, n):
+     
             ans = 0
-            for i in range(Len):
+            temp = arr.copy()
 
-                # already swapped and corrected or
-                # already present at correct pos
-                if (visited[i] or map[nums[i]] == i):
-                    continue
+            # Dictionary which stores the
+              # indexes of the input array
+            h = {}
 
-                j,cycle_size = i, 0
-                while (visited[j] == False):
-                    visited[j] = True
+            temp.sort()
 
-                    # move to next node
-                    j = map[nums[j]]
-                    cycle_size += 1
+            for i in range(n):
 
-                # Update answer by adding current cycle.
-                if (cycle_size > 0):
-                    ans += (cycle_size - 1)
- 
+                #h.[arr[i]
+                h[arr[i]] = i
+
+            init = 0
+
+            for i in range(n):
+
+                # This is checking whether
+                # the current element is
+                # at the right place or not
+                if (arr[i] != temp[i]):
+                    ans += 1
+                    init = arr[i]
+
+                    # If not, swap this element
+                      # with the index of the
+                      # element which should come here
+                    arr[i], arr[h[temp[i]]] = arr[h[temp[i]]], arr[i]
+
+                    # Update the indexes in
+                      # the hashmap accordingly
+                    h[init] = h[temp[i]]
+                    h[temp[i]] = i
+
             return ans
         minOps = 0
         queue = [root]
@@ -53,7 +57,7 @@ class Solution:
                 if poll.right:
                     queue.append(poll.right)
                 curLevel.append(poll.val)
-            minOps += minSwaps(curLevel)
+            minOps += minSwap(curLevel, len(curLevel))
                 
         return minOps
         
