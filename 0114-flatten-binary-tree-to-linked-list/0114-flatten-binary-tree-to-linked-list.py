@@ -14,7 +14,6 @@ class Solution:
     def helper(self, node):
         if not node:
             return None
-        print(node.val)
         curr = self.helper(node.left)
         
         rt = self.helper(node.right)    
